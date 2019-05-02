@@ -1,7 +1,6 @@
 package args
 
 import (
-	"errors"
 	"flag"
 	"fmt"
 	"strings"
@@ -41,9 +40,6 @@ func Parse(cmdline []string) (*Config, error) {
 	if err != nil {
 		fmt.Printf("omg got an error: %s", err)
 		return nil, err
-	}
-	if !fs.Parsed() {
-		return nil, errors.New("flagset didn't get parsed, wtf")
 	}
 	c.Vars = &sliceOfVars
 
