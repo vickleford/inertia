@@ -1,5 +1,1 @@
-thing
-has
-an
-{{ .image }}
-inside
+{{ .image }} has a big ole {{ .adjective}} {{ .noun }} inside
