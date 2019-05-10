@@ -1,1 +1,1 @@
-{{ .image }} has a big ole {{ .adjective}} {{ .noun }} inside
+{{ .image }} has a big ole {{ .adjective}} {{ .noun }} inside and knows {{ .something }}
