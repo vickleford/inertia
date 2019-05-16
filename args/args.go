@@ -1,7 +1,9 @@
 package args
 
 import (
+	"errors"
 	"flag"
+	"fmt"
 )
 
 type Config struct {
@@ -14,9 +16,14 @@ func Parse(cmdline []string) (*Config, error) {
 	sliceOfVars := make(Inputs)
 	sliceOfB64Vars := make(Base64Inputs)
 	fs := flag.NewFlagSet("inertia", flag.ExitOnError)
+	fs.Usage = func() {
+		fmt.Fprint(flag.CommandLine.Output(),
+			"Usage: inertia [ -set templatekey=value ... ] [ -b64set templatekey=value ... ] /path/to/template\n")
+		fs.PrintDefaults()
+	}
 
-	fs.Var(&sliceOfVars, "set", "Do this usage with this")
-	fs.Var(&sliceOfB64Vars, "b64set", "Do this usage with this")
+	fs.Var(&sliceOfVars, "set", "Set templatekey with value")
+	fs.Var(&sliceOfB64Vars, "b64set", "Set templatekey with the base64 encoding of value")
 
 	err := fs.Parse(cmdline)
 	if err != nil {
@@ -29,7 +36,12 @@ func Parse(cmdline []string) (*Config, error) {
 		c.Vars[k] = v
 	}
 
-	c.Template = fs.Args()[0]
+	if leftovers := fs.Args(); len(leftovers) > 0 {
+		c.Template = fs.Args()[0]
+	} else {
+		fs.Usage()
+		return nil, errors.New("Incorrect usage")
+	}
 
 	return c, nil
 }

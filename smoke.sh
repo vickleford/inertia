@@ -16,4 +16,15 @@ if [[ "$actual" != "$expected" ]]; then
 	exit 1
 fi
 
+actual=$(go run main.go 2>&1 | grep Usage)
+
+expected="Usage: inertia [ -set templatekey=value ... ] [ -b64set templatekey=value ... ] /path/to/template"
+
+if [[ "$actual" != "$expected" ]]; then
+	echo "FAILURE!"
+	echo "Wanted: $expected"
+	echo "Got: $actual"
+	exit 1
+fi
+
 echo "PASS"

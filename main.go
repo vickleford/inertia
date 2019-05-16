@@ -10,7 +10,10 @@ import (
 )
 
 func main() {
-	cfg, _ := args.Parse(os.Args[1:])
+	cfg, err := args.Parse(os.Args[1:])
+	if err != nil {
+		os.Exit(1)
+	}
 
 	tf, err := openSesame(cfg.Template)
 	if err != nil {

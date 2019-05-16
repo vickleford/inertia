@@ -1,8 +1,9 @@
 package args_test
 
 import (
-	"github.com/vickleford/inertia/args"
 	"testing"
+
+	"github.com/vickleford/inertia/args"
 )
 
 func TestSetRepeatingArgs(t *testing.T) {
@@ -41,8 +42,8 @@ func TestSetRepeatingB64Args(t *testing.T) {
 
 	mock := []string{
 		"-b64set", "one=foobar",
-		"-b64set", "two=bazonii", 
-		"-b64set", "bestartist=dennisbrown", 
+		"-b64set", "two=bazonii",
+		"-b64set", "bestartist=dennisbrown",
 		"template",
 	}
 	config, err := args.Parse(mock)
@@ -87,11 +88,17 @@ func TestBase64InputsToString(t *testing.T) {
 	b64inputs := make(args.Base64Inputs)
 	b64inputs.Set("foo=bar")
 	if actual := b64inputs.String(); actual != expected {
-		t.Errorf("Wanted '%s' but got '%s'", expected, actual)	
+		t.Errorf("Wanted '%s' but got '%s'", expected, actual)
 	}
 }
 
-// think about: cat template | inertia -set foo=bar | kubectl apply -f -
+func TestEmptyArgsGivesError(t *testing.T) {
+	mock := []string{"inertia"} // os.Args[1:] gives []
+	_, err := args.Parse(mock[1:])
+	if err == nil {
+		t.Errorf("Expected error, got none")
+	}
+}
 
 // need an error when template is presented before the arguments.
 // aluminum13:inertia vwatkins$ go run main.go rendering/testdata/simple.tpl -set image=foo -set adjective=hairy -set noun=bumpkin
